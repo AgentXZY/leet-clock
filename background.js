@@ -3,11 +3,19 @@ let seconds = 0;
 let isPaused = false;
 let currentTabId = null;
 
-// Initialize Badge State
+// Initialize Badge Style on Install
 chrome.runtime.onInstalled.addListener(() => {
+  setupBadgeStyle();
   chrome.action.setBadgeText({ text: "00:00" });
-  chrome.action.setBadgeBackgroundColor({ color: "#FFA116" });
 });
+
+// Helper function to set badge colors
+function setupBadgeStyle() {
+  chrome.action.setBadgeBackgroundColor({ color: '#1A1A1A' });
+  if (chrome.action.setBadgeTextColor) {
+    chrome.action.setBadgeTextColor({ color: '#00FF66' });
+  }
+}
 
 // Communication with Content Script
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
@@ -23,6 +31,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 });
 
 function startGlobalTimer() {
+  setupBadgeStyle();
   if (timerInterval) clearInterval(timerInterval);
   seconds = 0;
   isPaused = false;
@@ -37,21 +46,32 @@ function startGlobalTimer() {
 
 function stopGlobalTimer() {
   if (timerInterval) clearInterval(timerInterval);
+  timerInterval = null;
+  seconds = 0;
   chrome.action.setBadgeText({ text: "00:00" });
 }
 
 function updateBadge(sec) {
   const m = Math.floor(sec / 60).toString().padStart(2, "0");
   const s = (sec % 60).toString().padStart(2, "0");
-  // Chrome action badge fits ~4-5 chars cleanly
   chrome.action.setBadgeText({ text: `${m}:${s}` });
 }
 
-// Auto Pause when tab changes or window loses focus
+// Auto-Pause when switching tabs inside Chrome
 chrome.tabs.onActivated.addListener(async (activeInfo) => {
-  isPaused = (activeInfo.tabId !== currentTabId);
+  if (currentTabId) {
+    isPaused = (activeInfo.tabId !== currentTabId);
+  }
 });
 
-chrome.windows.onFocusChanged.addListener((windowId) => {
-  isPaused = (windowId === chrome.windows.WINDOW_ID_NONE);
+// Reset timer when leaving LeetCode problem pages (e.g. going back to problem set)
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  if (tabId === currentTabId && changeInfo.status === 'complete' && tab.url) {
+    const isProblemPage = tab.url.includes('leetcode.com/problems/');
+
+    if (!isProblemPage) {
+      stopGlobalTimer();
+      currentTabId = null;
+    }
+  }
 });
