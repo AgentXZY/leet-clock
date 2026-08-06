@@ -135,9 +135,20 @@
   }
 
   function getProblemNumber() {
-    const m = getRawTitleText().match(/^(\d+)\./);
-    return m ? m[1] : "?";
-  }
+  const raw = getRawTitleText();
+
+  let m = raw.match(/^(\d+)\./);
+  if (m) return m[1];
+
+  m = raw.match(/^(\d+)\s*-/);
+  if (m) return m[1];
+
+  const qNum = document.querySelector(
+    '[data-cy="question-title"], [class*="title"]'
+  )?.textContent?.match(/^(\d+)/);
+
+  return qNum ? qNum[1] : "?";
+}
 
   function getProblemTitle() {
     const text = getRawTitleText();
