@@ -125,26 +125,31 @@
     return m ? m[1] : "";
   }
 
-  // document.title is LeetCode's most reliable source - it's always formatted
-  // as "1249. Minimum Remove to Make Valid Parentheses - LeetCode".
-  // [class*="title"] was matching the wrong element (nav bar, ads, etc.)
-  // almost every time, which is why the number kept showing as "?".
-  function getProblemNumber() {
-    const m = (document.title || "").match(/^(\d+)\./);
-    if (m) return m[1];
+  // Open Graph title is the most reliably-formatted source LeetCode gives us
+  // ("1249. Minimum Remove to Make Valid Parentheses"), with document.title
+  // as a backup if it's ever missing.
+  function getRawTitleText() {
+    const og = document.querySelector('meta[property="og:title"]');
+    if (og && og.content && og.content.trim()) return og.content.trim();
+    return (document.title || "").replace(/-\s*LeetCode\s*$/i, "").trim();
+  }
 
-    const heading = document.querySelector('[data-cy="question-title"]');
-    if (heading) {
-      const hm = heading.textContent.match(/^(\d+)\./);
-      if (hm) return hm[1];
-    }
-    return "?";
+  function getProblemNumber() {
+    const m = getRawTitleText().match(/^(\d+)\./);
+    return m ? m[1] : "?";
   }
 
   function getProblemTitle() {
-    const title = (document.title || "").replace(/-\s*LeetCode\s*$/i, "").trim();
-    if (title) return title;
+    const text = getRawTitleText();
+    if (text) return text.replace(/^\d+\.\s*/, "").trim();
     return currentProblemSlug.replace(/-/g, " ");
+  }
+
+  // Always build the URL from the slug, not window.location.href - by the
+  // time "Accepted" shows, the URL has often already changed to a
+  // /submissions/<id>/ path, which is not where you want the link to go.
+  function getProblemUrl() {
+    return `https://leetcode.com/problems/${currentProblemSlug}/`;
   }
 
   function appendToNotes(text) {
@@ -165,24 +170,16 @@
     return false;
   }
 
-  // Scans every known LeetCode verdict container directly - no dependency on
-  // having caught a click on the submit button first. If LeetCode changes a
-  // class name, add the new selector here rather than gating on clicks again.
+  // Reads ONLY the real submission verdict. "console-result" is LeetCode's
+  // container for Run (test case) output - deliberately not read here,
+  // otherwise clicking Run gets treated as a real Submit. If LeetCode ever
+  // renames this locator, check it via DevTools (right-click the "Accepted"
+  // text after a real submit -> Inspect) and swap it in here.
   function getSubmissionVerdict() {
-    const selectors = [
-      '[data-e2e-locator="submission-result"]',
-      '[data-e2e-locator="console-result"]',
-      '.text-sd-success',
-      '.text-sd-accent',
-      '.text-red-s',
-      '.text-rose-500'
-    ];
-    for (const sel of selectors) {
-      const el = document.querySelector(sel);
-      if (el && el.innerText) {
-        const t = el.innerText.trim();
-        if (t) return t;
-      }
+    const el = document.querySelector('[data-e2e-locator="submission-result"]');
+    if (el && el.innerText) {
+      const t = el.innerText.trim();
+      if (t) return t;
     }
     return "";
   }
@@ -207,6 +204,7 @@
   //  2. A permanent lock blocking a second Accepted/Wrong Answer verdict
   //     later in the same problem (e.g. fail once, fix it, resubmit).
   let lastVerdictText = "";
+  let problemStartTime = null;
 
   function resetAllState() {
     lastVerdictText = "";
@@ -215,6 +213,7 @@
   function handleProblemChange() {
     currentProblemSlug = getProblemSlug(location.href);
     resetAllState();
+    problemStartTime = new Date();
     safeSendMessage({ action: "START_TIMER" });
   }
 
@@ -238,21 +237,30 @@
   const observer = new MutationObserver(() => {
     if (!chrome.runtime || !chrome.runtime.id) return;
 
+    // Run and Submit apparently render into the SAME result container on
+    // this LeetCode layout, so the text alone can't tell them apart - Run
+    // shows "Accepted" too whenever the visible sample cases pass. The one
+    // thing that's actually unique to a real Submit is that it changes the
+    // tab's URL to include /submissions/<id>/ - Run never does that. So we
+    // only look at the verdict text at all once that's true.
+    if (!location.href.includes('/submissions/')) return;
+
     const verdictText = getSubmissionVerdict();
     if (!verdictText || verdictText === lastVerdictText) return;
 
-    // Text is genuinely new - remember it immediately so any further
-    // mutations with this same text (cursor blinks, unrelated re-renders)
-    // are ignored, without needing a lock flag or a timer to clear it.
     lastVerdictText = verdictText;
 
     /* ---------- ACCEPTED ---------- */
     if (verdictText.includes("Accepted")) {
       showExtensionBanner(getRandomCandy(ACCEPTED_MESSAGES), true);
 
+      const endTime = new Date();
+      const fmtClock = (d) => d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
       safeSendMessage({ action: "GET_TIME" }, (res) => {
         const duration = res && res.elapsedTime ? res.elapsedTime : "00:00";
-        const note = `\n---\n[LeetClock Log]\nDate: ${new Date().toLocaleDateString()}\nDuration: ${duration}\n---\n`;
+        const startStr = problemStartTime ? fmtClock(problemStartTime) : "--:--";
+        const note = `\n---\n[LeetClock] ${endTime.toLocaleDateString()}\nStart: ${startStr}  End: ${fmtClock(endTime)}  Duration: ${duration}\n---\n`;
         appendToNotes(note);
       });
 
@@ -260,7 +268,7 @@
         action: "STOP_TIMER_AND_SAVE",
         problemId: getProblemNumber(),
         problemName: getProblemTitle(),
-        problemUrl: window.location.href,
+        problemUrl: getProblemUrl(),
         problemSlug: currentProblemSlug
       });
       return;
