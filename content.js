@@ -164,22 +164,53 @@
   }
 
   function appendToNotes(text) {
+    console.log("[LeetClock] appendToNotes called");
+
     const selectors = [
       'textarea[placeholder*="note" i]',
       '.note-editor textarea',
       '[class*="note"] textarea'
     ];
+
     for (const sel of selectors) {
       const area = document.querySelector(sel);
+
       if (area) {
-        area.value += text;
-        area.dispatchEvent(new Event("input", { bubbles: true }));
-        area.dispatchEvent(new Event("change", { bubbles: true }));
+        console.log("[LeetClock] Notes found:", sel);
+
+        const nativeSetter = Object.getOwnPropertyDescriptor(
+  HTMLTextAreaElement.prototype,
+  "value"
+).set;
+
+const oldValue = area.value;
+
+nativeSetter.call(area, oldValue + text);
+
+area.dispatchEvent(
+  new InputEvent("input", {
+    bubbles: true,
+    data: text,
+    inputType: "insertText"
+  })
+);
+
+area.dispatchEvent(
+  new Event("change", {
+    bubbles: true
+  })
+);
+
+area.focus();
+area.blur();
+
         return true;
       }
     }
+
+    console.log("[LeetClock] Notes area NOT found");
     return false;
-  }
+}
 
   // Reads ONLY the real submission verdict. "console-result" is LeetCode's
   // container for Run (test case) output - deliberately not read here,
