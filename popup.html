@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <style>
     body {
-      width: 200px;
+      width: 220px;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       margin: 0;
       padding: 12px;
@@ -45,7 +45,7 @@
       display: flex;
       flex-direction: column;
       gap: 4px;
-      max-height: 180px;
+      max-height: 200px;
       overflow-y: auto;
     }
     .problem-badge {
@@ -56,7 +56,16 @@
       font-weight: bold;
       display: flex;
       justify-content: space-between;
+      align-items: center;
       color: #fff;
+    }
+    .problem-badge a {
+      color: #4caf50;
+      text-decoration: none;
+    }
+    .problem-badge a:hover {
+      text-decoration: underline;
+      color: #00FF66;
     }
     .problem-time {
       font-size: 11px;
