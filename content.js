@@ -65,20 +65,22 @@
 
   /* ===================== BANNER DATA ===================== */
   const ACCEPTED_MESSAGES = [
-    { main: "SWEET! 🍬", sub: "\"I am inevitable.\" — Your O(1) Solution" },
-    { main: "DELICIOUS! ⚡", sub: "\"Look at me... I am the Senior Dev now.\"" },
-    { main: "UNSTOPPABLE! 👑", sub: "\"He's beginning to believe.\" — The Matrix" },
-    { main: "CLEAN SWEEP! 🔥", sub: "It worked on the first try?! Is this legal?" },
-    { main: "VICTORY! 🎯", sub: "Garbage Collector: \"My work here is done.\"" }
-  ];
+  { main: "WITH GREAT POWER... 🕸️", sub: "\"...comes an O(1) runtime complexity.\"" },
+  { main: "I AM VENGEANCE 🦇", sub: "\"It's not who I am underneath, but my code that defines me.\"" },
+  { main: "MAIN CHARACTER ENERGY ⚡", sub: "\"Look at me... I am the Senior Dev now.\"" },
+  { main: "ABSOLUTE CINEMA 🎬", sub: "\"He is beginning to believe.\" — Morpheus" },
+  { main: "GIGACHAD CODE 🗿", sub: "Compiles on first try. Refuses to elaborate. Leaves." },
+  { main: "VICTORY! 🎯", sub: "Garbage Collector: \"My work here is done.\"" }
+];
 
-  const REJECTED_MESSAGES = [
-    { main: "OOPS! 💥", sub: "\"Why do we fall? So we can learn to fix TLE.\"" },
-    { main: "WASTED 🛑", sub: "\"Emotional Damage!\" — Wrong Answer" },
-    { main: "HOLD UP! 🔍", sub: "\"One does not simply pass tests without debugging.\"" },
-    { main: "SO CLOSE! 💪", sub: "\"It's not a bug, it's an undocumented feature.\"" },
-    { main: "SYSTEM FAILURE 🤖", sub: "\"Houston, we have an Off-By-One error.\"" }
-  ];
+const REJECTED_MESSAGES = [
+  { main: "FFAAAAAHHH! 😩💥", sub: "Testcase 47/48 failed... pure pain." },
+  { main: "WHY DO WE FALL? 🦇", sub: "\"So we can learn to pick ourselves up and fix the TLE, Bruce.\"" },
+  { main: "CANON EVENT 🕷️", sub: "You can't stop this bug. It was bound to happen." },
+  { main: "EMOTIONAL DAMAGE! 🛑", sub: "\"One does not simply pass tests without print statements.\"" },
+  { main: "THE DARK KNIGHT RISES 🛡️", sub: "\"The night is darkest just before the green banner.\"" },
+  { main: "WASTED 💥", sub: "\"Houston, we have an Off-By-One error.\"" }
+];
 
   function getRandomCandy(arr) {
     return arr[Math.floor(Math.random() * arr.length)];
