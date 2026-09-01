@@ -214,20 +214,6 @@ area.blur();
     return false;
 }
 
-  // Reads ONLY the real submission verdict. "console-result" is LeetCode's
-  // container for Run (test case) output - deliberately not read here,
-  // otherwise clicking Run gets treated as a real Submit. If LeetCode ever
-  // renames this locator, check it via DevTools (right-click the "Accepted"
-  // text after a real submit -> Inspect) and swap it in here.
-  function getSubmissionVerdict() {
-    const el = document.querySelector('[data-e2e-locator="submission-result"]');
-    if (el && el.innerText) {
-      const t = el.innerText.trim();
-      if (t) return t;
-    }
-    return "";
-  }
-
   function isErrorVerdict(text) {
     return (
       text.includes("Wrong Answer") ||
@@ -240,24 +226,49 @@ area.blur();
 
   /* ===================== STATE ===================== */
   let currentProblemSlug = getProblemSlug(location.href);
-  // We only track the last verdict text we've already reacted to. A verdict
-  // is "new" and worth acting on if its text differs from this - no lock
-  // flag, no timers. This avoids two failure modes we hit before:
-  //  1. A timer-based unlock re-firing the toast forever on an unchanged
-  //     screen (any DOM mutation, even a blinking cursor, re-triggered it).
-  //  2. A permanent lock blocking a second Accepted/Wrong Answer verdict
-  //     later in the same problem (e.g. fail once, fix it, resubmit).
-  let lastVerdictText = "";
+  let lastKnownTitle = getRawTitleText();
   let problemStartTime = null;
 
+  // Accepted and errors render in two SEPARATE elements
+  // (submission-result vs console-result), not one that gets swapped - so
+  // each needs its own "last seen" tracker. Otherwise a leftover Accepted
+  // element from an earlier submission can permanently block every later
+  // Wrong Answer from ever being noticed, since checking one first meant
+  // never even looking at the other again.
+  let lastAcceptedText = "";
+  let lastErrorText = "";
+
+  // The problem number/name comes from a title/meta tag that may not have
+  // settled the instant the page loads. Cache it as early as possible (with
+  // a few retries) so it's ready well before you actually submit, rather
+  // than reading it cold at the exact moment Accepted fires.
+  let currentProblemNumberCache = "?";
+  let currentProblemNameCache = "";
+
+  function refreshProblemMeta(attempt) {
+    attempt = attempt || 0;
+    const num = getProblemNumber();
+    const name = getProblemTitle();
+    if (num !== "?") currentProblemNumberCache = num;
+    if (name) currentProblemNameCache = name;
+    if ((currentProblemNumberCache === "?" || !currentProblemNameCache) && attempt < 6) {
+      setTimeout(() => refreshProblemMeta(attempt + 1), 600);
+    }
+  }
+
   function resetAllState() {
-    lastVerdictText = "";
+    lastAcceptedText = "";
+    lastErrorText = "";
   }
 
   function handleProblemChange() {
     currentProblemSlug = getProblemSlug(location.href);
+    lastKnownTitle = getRawTitleText();
     resetAllState();
     problemStartTime = new Date();
+    currentProblemNumberCache = "?";
+    currentProblemNameCache = "";
+    refreshProblemMeta();
     safeSendMessage({ action: "START_TIMER" });
   }
 
@@ -265,62 +276,85 @@ area.blur();
 
   /* ===================== SPA NAVIGATION ===================== */
   // Catches Next/Prev arrows and the sidebar problem list, which change the
-  // URL via client-side routing without a full page load.
+  // URL via client-side routing without a full page load. We compare BOTH
+  // the URL slug and the page title - not every navigation path (study
+  // plans, daily challenge, etc.) necessarily changes the URL the same way,
+  // but the title reliably updates per problem regardless of the route.
   const navInterval = setInterval(() => {
     if (!chrome.runtime || !chrome.runtime.id) {
       clearInterval(navInterval);
       return;
     }
     const newSlug = getProblemSlug(location.href);
-    if (newSlug && newSlug !== currentProblemSlug) {
+    const newTitle = getRawTitleText();
+    if ((newSlug && newSlug !== currentProblemSlug) || (newTitle && newTitle !== lastKnownTitle)) {
       handleProblemChange();
     }
   }, 300);
+
+  /* ===================== PROACTIVE RESET ON SUBMIT CLICK ===================== */
+  // Best-effort only, never a gate: if this catches a click on the Submit
+  // button, it clears both trackers so whatever verdict shows up next -
+  // even one that's byte-for-byte identical to the last one - is treated as
+  // new. If the selector ever misses the real button, detection still works
+  // fine for anything whose text actually changes; this only helps the
+  // identical-text-twice-in-a-row case.
+  document.addEventListener("click", (e) => {
+    const submitBtn = e.target.closest(
+      '[data-e2e-locator="console-submit-button"], [data-e2e-locator*="submit"], button[class*="submit"], [class*="submit-button"]'
+    );
+    if (submitBtn) resetAllState();
+  });
 
   /* ===================== VERDICT OBSERVER ===================== */
   const observer = new MutationObserver(() => {
     if (!chrome.runtime || !chrome.runtime.id) return;
 
-    // Run and Submit apparently render into the SAME result container on
-    // this LeetCode layout, so the text alone can't tell them apart - Run
-    // shows "Accepted" too whenever the visible sample cases pass. The one
-    // thing that's actually unique to a real Submit is that it changes the
-    // tab's URL to include /submissions/<id>/ - Run never does that. So we
-    // only look at the verdict text at all once that's true.
+    // Run and Submit apparently render into the SAME two containers on this
+    // LeetCode layout, so text alone can't tell them apart - Run can show
+    // "Accepted" too whenever the visible sample cases pass. The one thing
+    // that's actually unique to a real Submit is that it changes the tab's
+    // URL to include /submissions/<id>/ - Run never does that.
     if (!location.href.includes('/submissions/')) return;
 
-    const verdictText = getSubmissionVerdict();
-    if (!verdictText || verdictText === lastVerdictText) return;
-
-    lastVerdictText = verdictText;
+    const successEl = document.querySelector('[data-e2e-locator="submission-result"]');
+    const errorEl = document.querySelector('[data-e2e-locator="console-result"]');
+    const successText = successEl && successEl.innerText ? successEl.innerText.trim() : "";
+    const errorText = errorEl && errorEl.innerText ? errorEl.innerText.trim() : "";
 
     /* ---------- ACCEPTED ---------- */
-    if (verdictText.includes("Accepted")) {
-      showExtensionBanner(getRandomCandy(ACCEPTED_MESSAGES), true);
+    if (successText && successText !== lastAcceptedText) {
+      lastAcceptedText = successText;
 
-      const endTime = new Date();
-      const fmtClock = (d) => d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      if (successText.includes("Accepted")) {
+        showExtensionBanner(getRandomCandy(ACCEPTED_MESSAGES), true);
 
-      safeSendMessage({ action: "GET_TIME" }, (res) => {
-        const duration = res && res.elapsedTime ? res.elapsedTime : "00:00";
-        const startStr = problemStartTime ? fmtClock(problemStartTime) : "--:--";
-        const note = `\n---\n[LeetClock] ${endTime.toLocaleDateString()}\nStart: ${startStr}  End: ${fmtClock(endTime)}  Duration: ${duration}\n---\n`;
-        appendToNotes(note);
-      });
+        const endTime = new Date();
+        const fmtClock = (d) => d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-      safeSendMessage({
-        action: "STOP_TIMER_AND_SAVE",
-        problemId: getProblemNumber(),
-        problemName: getProblemTitle(),
-        problemUrl: getProblemUrl(),
-        problemSlug: currentProblemSlug
-      });
-      return;
+        safeSendMessage({ action: "GET_TIME" }, (res) => {
+          const duration = res && res.elapsedTime ? res.elapsedTime : "00:00";
+          const startStr = problemStartTime ? fmtClock(problemStartTime) : "--:--";
+          const note = `\n---\n[LeetClock] ${endTime.toLocaleDateString()}\nStart: ${startStr}  End: ${fmtClock(endTime)}  Duration: ${duration}\n---\n`;
+          appendToNotes(note);
+        });
+
+        safeSendMessage({
+          action: "STOP_TIMER_AND_SAVE",
+          problemId: currentProblemNumberCache !== "?" ? currentProblemNumberCache : getProblemNumber(),
+          problemName: currentProblemNameCache || getProblemTitle(),
+          problemUrl: getProblemUrl(),
+          problemSlug: currentProblemSlug
+        });
+      }
     }
 
     /* ---------- ERRORS ---------- */
-    if (isErrorVerdict(verdictText)) {
-      showExtensionBanner(getRandomCandy(REJECTED_MESSAGES), false);
+    if (errorText && errorText !== lastErrorText) {
+      lastErrorText = errorText;
+      if (isErrorVerdict(errorText)) {
+        showExtensionBanner(getRandomCandy(REJECTED_MESSAGES), false);
+      }
     }
   });
 
