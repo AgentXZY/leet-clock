@@ -1,217 +1,148 @@
 # ⏱️ LeetClock
 
-> **Track LeetCode solve times automatically — zero extra clicks.**
+> ## **Solve. Submit. Get the dopamine hit. 🎉**
+>
+> **LeetClock automatically tracks your LeetCode solve time, saves your recent solves, logs your sessions, and celebrates every Accepted submission with a little developer dopamine.**
 
-LeetClock is a lightweight Manifest V3 Chrome extension that automatically tracks how long you spend solving LeetCode problems without requiring manual timers or additional interactions.
+![Chrome Extension](https://img.shields.io/badge/Chrome-Extension-4285F4?logo=googlechrome\&logoColor=white)
+![Manifest V3](https://img.shields.io/badge/Manifest-V3-blue)
+![JavaScript](https://img.shields.io/badge/JavaScript-Vanilla%20JS-F7DF1E?logo=javascript\&logoColor=black)
+![Local First](https://img.shields.io/badge/Data-Local%20Storage-success)
 
-Instead of starting and stopping a stopwatch yourself, LeetClock runs in the background, intelligently pauses when you leave the problem, and records your solve time when you successfully submit an accepted solution.
+**`chrome-extension` · `leetcode` · `leetcode-tracker` · `productivity` · `developer-tools` · `solve-time-tracker` · `coding` · `dsa` · `gamified` · `developer-humor` · `coding-dopamine` · `javascript` · `manifest-v3`**
 
----
+LeetClock is a lightweight Chrome extension that makes your LeetCode practice a little more trackable—and a little more fun.
 
-## 🚀 Features
+Open a problem and the timer starts automatically. Solve it, submit it, and when you get that beautiful **Accepted**, LeetClock records your solve time, saves the problem to your recent history, logs the session in your LeetCode notes, and throws you a randomized reaction for that extra dopamine hit.
 
-### ⚡ Live Toolbar Badge
+Your **last 15 unique solved problems** are saved locally with their solve durations and direct links back to the questions.
 
-Displays a real-time timer directly on the extension icon in your Chrome toolbar (`MM:SS` format), allowing you to monitor progress at a glance.
-
-### ⏸️ Smart Auto-Pause
-
-Automatically pauses timing when:
-
-* You switch to another browser tab
-* You minimize Chrome
-* Chrome loses focus
-* You leave the LeetCode problem page
-
-This ensures recorded times reflect actual problem-solving focus rather than idle time.
-
-### 📝 Automatic Note Logging
-
-When your submission receives an **Accepted** verdict, LeetClock automatically appends the following information to your LeetCode problem notes:
-
-* Start Time
-* End Time
-* Active Solve Duration
-
-This creates a personal solve log directly inside LeetCode.
-
-### 📊 Quick History
-
-Access your most recent solving activity through the extension popup.
-
-The popup displays:
-
-* Last 10 solved problem IDs
-* Recorded solve times
-* Quick overview of recent performance
-
-### 🔒 100% Local
-
-LeetClock does not require:
-
-* Accounts
-* Sign-ups
-* Cloud services
-* External databases
-
-All data is stored locally using `chrome.storage.local`.
+**No manual timers. No accounts. No backend. Just open, solve, submit, repeat.**
 
 ---
 
-## 🛠️ Installation
+## ✨ Features
 
-### 1. Clone the Repository
+### ⏱️ Automatic Solve Tracking
 
-```bash
+Open a LeetCode problem and LeetClock automatically starts a new solving session.
+
+Your current solve time is displayed directly on the Chrome toolbar badge.
+
+### 🧠 Knows When You Actually Solved It
+
+LeetClock distinguishes between running sample test cases and submitting an actual solution.
+
+Only a real **Accepted submission** gets recorded as a completed solve.
+
+### 📜 Last 10 Solved
+
+Your last **10 unique solved problems** are saved locally with:
+
+* Problem number
+* Solve duration
+* Direct link back to the problem
+
+Solve the same problem again and its entry gets updated instead of duplicated.
+
+### 📝 Automatic Session Notes
+
+After an Accepted submission, LeetClock adds a solve log directly to your LeetCode notes:
+
+```text id="qlm33j"
+---
+[LeetClock] 01/09/2026
+Start: 03:10 PM  End: 03:34 PM  Duration: 24:18
+---
+```
+
+### 🎉 Developer Dopamine Included
+
+Accepted? Get a randomized animated celebration.
+
+Wrong Answer? TLE? Runtime Error?
+
+LeetClock has reactions for those too—because debugging pain also deserves commentary.
+
+### 🔒 Completely Local
+
+No accounts. No sign-ups. No APIs. No cloud.
+
+Your data stays in your browser using `chrome.storage.local`.
+
+---
+
+## 🔄 How It Works
+
+```text id="uwqyl7"
+Open a LeetCode Problem
+          ↓
+Timer Starts Automatically ⏱️
+          ↓
+     Solve & Submit
+          ↓
+      Accepted? 🎉
+          ↓
+Save Solve Time + History 📜
+          ↓
+ Log Session in Notes 📝
+```
+
+LeetClock also detects LeetCode's client-side navigation, so switching to another problem automatically starts a new session.
+
+> **Note:** Switching tabs or applications does not pause the timer. The session ends when you navigate away from the problem, solve it, or close the tracked tab.
+
+---
+
+## 🚀 Installation
+
+```bash id="bslxlc"
 git clone https://github.com/YOUR_USERNAME/LeetClock.git
 ```
 
-### 2. Open Chrome Extensions
+Then:
 
-Navigate to:
-
-```text
-chrome://extensions/
-```
-
-### 3. Enable Developer Mode
-
-Turn on **Developer Mode** using the toggle in the top-right corner.
-
-### 4. Load the Extension
-
-Click:
-
-```text
-Load unpacked
-```
-
-Then select the downloaded **LeetClock** folder.
-
-### 5. Pin the Extension
-
-Pin **LeetClock** to your Chrome toolbar for quick access and visibility.
+1. Open `chrome://extensions/`
+2. Enable **Developer mode**
+3. Click **Load unpacked**
+4. Select the LeetClock project folder
+5. Pin the extension and start solving
 
 ---
 
-## 📖 How to Use
+## 🧰 Built With
 
-### Step 1: Open a LeetCode Problem
-
-Visit any LeetCode problem page.
-
-The timer starts automatically.
-
-### Step 2: Solve the Problem
-
-Work normally while LeetClock tracks your active solving time.
-
-If you switch tabs or applications, timing automatically pauses.
-
-### Step 3: Submit Your Solution
-
-Submit your code as usual.
-
-### Step 4: Get Your Solve Log
-
-When the submission receives an **Accepted** verdict:
-
-* Solve duration is saved locally
-* The problem ID is added to history
-* Timing details are appended to your LeetCode notes automatically
-
----
-
-## 📊 Example Note Entry
-
-```text
-⏱️ LeetClock Session
-
-Start Time: 2026-08-05 10:14 AM
-End Time: 2026-08-05 10:42 AM
-Active Duration: 28m 17s
-```
-
----
-
-## 🧰 Tech Stack
-
-### Core Technologies
-
+* JavaScript
+* Chrome Extensions API
 * Manifest V3
-* Vanilla JavaScript (ES6+)
-
-### Chrome APIs
-
-* `chrome.action`
+* MutationObserver
 * `chrome.storage.local`
-* `chrome.tabs`
-* `chrome.runtime`
-* `chrome.alarms`
 
 ---
 
 ## 📂 Project Structure
 
-```text
+```text id="4v8sso"
 LeetClock/
-│
 ├── manifest.json
-├── background.js
-├── content.js
-├── popup.html
-├── popup.js
-├── popup.css
+├── background.js      # Timer & storage
+├── content.js         # LeetCode interaction
+├── popup.html         # Extension UI
+├── popup.js           # Timer & solve history
 ├── icons/
-│   ├── 16.png
-│   ├── 48.png
-│   └── 128.png
-│
 └── README.md
 ```
 
 ---
 
-## 🤝 Contributing
+## 🗺️ Roadmap
 
-Contributions are welcome.
-
-If you would like to add a feature or fix a bug:
-
-### Create a Branch
-
-```bash
-git checkout -b feature/your-feature-name
-```
-
-### Commit Your Changes
-
-```bash
-git commit -m "add: description of feature"
-```
-
-### Push to GitHub
-
-```bash
-git push origin feature/your-feature-name
-```
-
-### Open a Pull Request
-
-Submit a Pull Request describing your changes and rationale.
-
----
-
-## 🎯 Roadmap
-
-Future improvements may include:
-
-* Daily solve statistics
-* Weekly productivity reports
-* Export solve history as CSV
-* Difficulty-wise timing analytics
-* Streak tracking
-* Contest mode support
+* [ ] Daily & weekly statistics
+* [ ] Difficulty-wise analytics
+* [ ] Personal best solve times
+* [ ] Streak tracking
+* [ ] CSV / JSON export
+* [ ] Contest support
 
 ---
 
@@ -219,14 +150,10 @@ Future improvements may include:
 
 Distributed under the **MIT License**.
 
-See the `LICENSE` file for additional information.
-
----
-
 <div align="center">
 
-**Built for LeetCode users who care about consistency, focus, and measurable improvement.**
+### ⏱️ Don't just solve problems. Watch yourself get better.
 
-⭐ If you find LeetClock useful, consider starring the repository.
+⭐ **If you find LeetClock useful, consider starring the repository.**
 
 </div>

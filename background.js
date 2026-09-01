@@ -82,9 +82,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         timestamp: new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
 
-      // Unique by slug, keep last 10
+      // Unique by slug, keep last 15
       const filtered = solved.filter(p => p.slug !== request.problemSlug);
-      const updated = [newEntry, ...filtered].slice(0, 10);
+      const updated = [newEntry, ...filtered].slice(0, 15);
 
       chrome.storage.local.set({
         solvedProblems: updated,
