@@ -32,7 +32,7 @@
       text-align: right;
       color: #FFFFFF;
       pointer-events: none;
-      animation: extPopDown 4.0s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      animation: extPopDown 7.0s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
       box-shadow: 0 12px 30px rgba(0,0,0,0.5), inset 0 1px 2px rgba(255,255,255,0.4);
       text-shadow: 0 2px 4px rgba(0,0,0,0.6);
       display: flex;
@@ -64,22 +64,106 @@
   document.head.appendChild(style);
 
   /* ===================== BANNER DATA ===================== */
-  const ACCEPTED_MESSAGES = [
+const ACCEPTED_MESSAGES = [
+  // Cinema & Pop Culture
   { main: "WITH GREAT POWER... 🕸️", sub: "\"...comes an O(1) runtime complexity.\"" },
   { main: "I AM VENGEANCE 🦇", sub: "\"It's not who I am underneath, but my code that defines me.\"" },
   { main: "MAIN CHARACTER ENERGY ⚡", sub: "\"Look at me... I am the Senior Dev now.\"" },
   { main: "ABSOLUTE CINEMA 🎬", sub: "\"He is beginning to believe.\" — Morpheus" },
+  { main: "I AM THE ONE WHO CODES 🧪", sub: "\"A bug pops up and you think of me? No. I am the one who submits!\"" },
+  { main: "OPPENHEIMER MOMENT ⚛️", sub: "\"Now I am become Death, destroyer of O(N²) loops.\"" },
+  { main: "NOSTALGIC FLEX 🕶️", sub: "\"Say my name.\" — O(1) Space Complexity" },
+  { main: "AVENGERS ASSEMBLE 🛡️", sub: "All data structures aligned in perfect harmony." },
+
+  // Dev Memes & High Dopamine
   { main: "GIGACHAD CODE 🗿", sub: "Compiles on first try. Refuses to elaborate. Leaves." },
-  { main: "VICTORY! 🎯", sub: "Garbage Collector: \"My work here is done.\"" }
+  { main: "VICTORY! 🎯", sub: "Garbage Collector: \"My work here is done.\"" },
+  { main: "NO STACKOVERFLOW? 🤨", sub: "Wrote the entire logic raw. Pure brain power." },
+  { main: "DOPAMINE OVERLOAD 🧠💥", sub: "100/100 Testcases Passed. Inject it straight into the veins." },
+  { main: "COOKED & SERVED 👨‍🍳", sub: "That algorithm was certified Michelin Star quality." },
+  { main: "INTERVIEWER IN SHOCK 😲", sub: "\"Wait... you actually solved this without brute force?\"" },
+  { main: "PROD READY 🚀", sub: "Ship it to production immediately before anyone touches it." },
+  { main: "CLEAN SWEEP 🧹", sub: "Zero warnings, zero memory leaks, pure execution." },
+  { main: "BRAIN AT 100% 🧠⚡", sub: "Synapses firing at maximum clock speed." },
+  { main: "NO BUGS INSIDE 🐛🚫", sub: "Even the edge cases bowed down in respect." },
+  { main: "LEETCODE CONQUERED 🏰", sub: "Added another hard-earned problem to the collection." },
+  { main: "TOP 1% RUNTIME 📈", sub: "Beating 99.8% of JavaScript submissions!" },
+
+  // Gaming References
+  { main: "MISSION PASSED! 🚗💨", sub: "+RESPECT // GTA San Andreas Theme Plays" },
+  { main: "VICTORY ROYALE 👑", sub: "#1 Solution in the lobby today." },
+  { main: "ACE! 🎯", sub: "Clutched the 1v5 against LeetCode Hard testcases." },
+  { main: "ACHIEVEMENT UNLOCKED 🏆", sub: "Master of Arrays & HashMaps." },
+  { main: "PENTAKILL! ⚔️", sub: "Wiped all edge cases off the map." },
+  { main: "FATALITY! 🩸", sub: "Flawless Victory against memory leaks." },
+  { main: "DIAMOND HANDS 💎", sub: "Held the edge case logic all the way to acceptance." },
+  { main: "LEVEL UP! ⚡", sub: "+500 EXP in Data Structures & Algorithms." },
+  { main: "HEADSHOT 🎯", sub: "One-tapped the binary search implementation." },
+  { main: "SPEEDRUNNER ⏱️", sub: "New World Record for fastest submission." },
+  { main: "GODMODE ACTIVATED ⚡", sub: "SV_CHEATS 1 enabled in real life." },
+  { main: "GG WP 🤝", sub: "LeetCode server bowed down." },
+  { main: "FINAL BOSS DEFEATED 👹", sub: "Health bar cleared. Loot collected." },
+  { main: "CRITICAL HIT! 💥", sub: "Dealt 9999 damage to memory usage." },
+  { main: "FLAWLESS RUN 🛡️", sub: "No damage taken. Zero retries needed." },
+  { main: "ULTIMATE READY 🌀", sub: "Unleashed the maximum efficiency combo." },
+
+  // Anime & Hype Quotes
+  { main: "DOMAIN EXPANSION ⛩️", sub: "\"Infinite Efficiency: O(1) Memory Boundary!\"" },
+  { main: "ULTRA INSTINCT 🌌", sub: "Hand moved on its own. Code wrote itself." },
+  { main: "BANKAI RELEASE ⚔️", sub: "Unleashed the ultimate algorithmic power." },
+  { main: "OVER 9000! 💥", sub: "Power level of this runtime is off the charts." }
 ];
 
 const REJECTED_MESSAGES = [
-  { main: "FFAAAAAHHH! 😩💥", sub: "Testcase 47/48 failed... pure pain." },
-  { main: "WHY DO WE FALL? 🦇", sub: "\"So we can learn to pick ourselves up and fix the TLE, Bruce.\"" },
-  { main: "CANON EVENT 🕷️", sub: "You can't stop this bug. It was bound to happen." },
-  { main: "EMOTIONAL DAMAGE! 🛑", sub: "\"One does not simply pass tests without print statements.\"" },
+  // Red Dead Redemption 2 Specials
+  { main: "I'M AFRAID... 🤠💔", sub: "\"I'm afraid my code... it isn't working, Sister.\"" },
+  { main: "YOU SIR, ARE A FISH 🐟", sub: "And this code is a total flop." },
+  { main: "I HAVE A PLAN! 📜", sub: "\"Just one more `print()` statement, Arthur! Have some faith!\"" },
+  { main: "TAHITI AWAITS 🏝️", sub: "Because this solution isn't going anywhere." },
+  { main: "LUMBAGO STRIKES 🦴", sub: "Terminal laziness in loop condition." },
+
+  // Classic GTA & Gaming Pain
+  { main: "AH SHIT, HERE WE GO AGAIN 🚶‍♂️", sub: "Worst place in the world... Testcase #47." },
+  { main: "WASTED 💥", sub: "Busted by an off-by-one array access." },
+  { main: "YOU DIED 🗡️", sub: "Dark Souls boss music playing in background..." },
+  { main: "MISSION FAILED ❌", sub: "\"We'll get 'em next time.\" — Soap MacTavish" },
+  { main: "TACTICAL RESET 🛡️", sub: "Fall back, regroup, and spam more `console.log()`" },
+  { main: "CYBERBUG 2077 🤖", sub: "Glitched through the map into infinite recursion." },
+  { main: "OUT OF BOUNDS 🛑", sub: "IndexOutOfBoundsException dropped you off a cliff." },
+  { main: "LAG SPIKE 📡", sub: "Runtime took 9999ms to calculate `null`." },
+  { main: "NO MANA 🧙‍♂️", sub: "Out of brainpower. Refill coffee immediately." },
+  { main: "DEFEAT 💔", sub: "Surrender at 20 minutes." },
+
+  // Pop Culture & Cinema Heartbreak
+  { main: "WHY DO WE FALL? 🦇", sub: "\"So we can learn to fix the TLE, Bruce.\"" },
+  { main: "CANON EVENT 🕷️", sub: "You can't stop this bug. It was written in the multiversal code." },
+  { main: "EMOTIONAL DAMAGE! 🛑", sub: "\"One does not simply pass tests without edge case handling.\"" },
+  { main: "IT'S A TRAP! 🪤", sub: "LeetCode trick testcase caught you slipping." },
+  { main: "INCEPTION BUG 🌀", sub: "A bug inside a recursion inside a nested loop." },
   { main: "THE DARK KNIGHT RISES 🛡️", sub: "\"The night is darkest just before the green banner.\"" },
-  { main: "WASTED 💥", sub: "\"Houston, we have an Off-By-One error.\"" }
+  { main: "MY PRECIOUS 💍", sub: "Lost the memory reference in the void." },
+  { main: "MR. STARK... ⏳", sub: "\"I don't feel so good...\" — Your heap memory" },
+
+  // Dev Brainrot & Pure Pain
+  { main: "FFAAAAAHHH! 😩💥", sub: "Testcase 47/48 failed... absolute cooked behavior." },
+  { main: "SKILL ISSUE? 🧟", sub: "Pointer went one step too far into the shadow realm." },
+  { main: "SEGFAULT SURPRISE 💣", sub: "Segmentation Fault (Core Dumped)." },
+  { main: "TIME LIMIT EXCEEDED 🐢", sub: "O(N³) runtime is still computing in 2030." },
+  { main: "MEMORY LEAK 🌊", sub: "RAM usage stonks going straight to the moon." },
+  { main: "IT WORKED LOCALLY 🤡", sub: "\"Works fine on my machine, I swear!\"" },
+  { main: "NULL POINTER PAIN ⚡", sub: "Dereferencing `null` like a true wild card." },
+  { main: "COMPILER CRIED 🤖💧", sub: "Missing semicolon or missing brain cells?" },
+  { main: "STACK OVERFLOW 🌊", sub: "Infinite recursion reached the bottom of the ocean." },
+  { main: "WRONG ANSWER 🤡", sub: "Expected: `42` | Output: `[object Object]`" },
+  { main: "COOKED BEYOND REPAIR 🍳", sub: "Logic burnt to a crisp." },
+
+  // Anime & Dramatic Sadness
+  { main: "EMOTIONAL DAMAGE 💔", sub: "Inner peace destroyed by a single edge case." },
+  { main: "GEASS FAILED 👁️", sub: "Command did not execute as intended." },
+  { main: "SHINRA TENSEI 🌋", sub: "Almighty Push threw your solution out of memory." },
+  { main: "DEATH NOTE 📓", sub: "Wrote the variable name wrong and killed the thread." },
+  { main: "DOMAIN COLLAPSED ⛩️", sub: "Boundaries broken. Out of memory." },
+  { main: "RESPAWN IN 5s ⏳", sub: "Take a deep breath, reset the code, and run it back." }
 ];
 
   function getRandomCandy(arr) {
@@ -106,7 +190,7 @@ const REJECTED_MESSAGES = [
 
     setTimeout(() => {
       if (banner.parentNode) banner.remove();
-    }, 4000);
+    }, 7000);
   }
 
   /* ===================== HELPERS ===================== */
