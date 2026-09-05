@@ -15,11 +15,37 @@ LeetClock is a lightweight Chrome extension that makes your LeetCode practice a 
 
 Open a problem and the timer starts automatically. Solve it, submit it, and when you get that beautiful **Accepted**, LeetClock records your solve time, saves the problem to your recent history, logs the session in your LeetCode notes, and throws you a randomized reaction for that extra dopamine hit.
 
-Your **last 15 unique solved problems** are saved locally with their solve durations and direct links back to the questions.
+Your **last 10 unique solved problems** are saved locally with their solve durations and direct links back to the questions.
 
 **No manual timers. No accounts. No backend. Just open, solve, submit, repeat.**
 
----
+## 🚀 Get LeetClock
+
+Install the extension directly from the **Chrome Web Store**:
+
+<p align="center">
+  <a href="https://chromewebstore.google.com/detail/leetclock/ljoojicooppjgfofmollbilcgmboajhk">
+    <img src="https://img.shields.io/badge/Install%20from-Chrome%20Web%20Store-4285F4?logo=googlechrome&logoColor=white" alt="Install LeetClock from Chrome Web Store">
+  </a>
+</p>
+
+## 📸 See It in Action
+
+<p align="center">
+  <img src="https://lh3.googleusercontent.com/zFN343SZXF9IO1qvBWgQryK792Wdm1_tBs6G7eQfF0iUNrtBhxadIjwu-uCDZz7y-6qsaAJLviXCZHhlHW9oZ-CQyQ=s1280-w1280-h800" alt="LeetClock Chrome extension showing solve timer and recent history" width="800">
+</p>
+
+<p align="center">
+  <img src="https://lh3.googleusercontent.com/NzwS5sVPKFCuaSamvv_2c9bR5EPTC82kHGZp-z9GPus5R_WTyga5My78TH2ODX3jRJp1MmyerutqEWQsDzIHRkM3kg=s1280-w1280-h800" alt="LeetClock popup displaying solved problem history" width="800">
+</p>
+
+<p align="center">
+  <img src="https://lh3.googleusercontent.com/3n6JwX3cR-bntGQMsRapazTDJZBnqpq2YH90szzco1VSnoc0awMYvy_pViuLXaUbSEexCXFgx2UX4epCfLKJnFj5Xg=s1280-w1280-h800" alt="LeetClock tracking a LeetCode solving session" width="800">
+</p>
+
+<p align="center">
+  <img src="https://lh3.googleusercontent.com/soKQqpkkznAmlcIH7743kCTHrzlB1GvulJUGtoer5HywiP_bgS8nOwlVBZ_RAwi1FLPQcGdSQJeWFDdLk33mKc2A1WI=s1280-w1280-h800" alt="LeetClock celebrating an Accepted submission" width="800">
+</p>
 
 ## ✨ Features
 
@@ -49,7 +75,7 @@ Solve the same problem again and its entry gets updated instead of duplicated.
 
 After an Accepted submission, LeetClock adds a solve log directly to your LeetCode notes:
 
-```text id="qlm33j"
+```text
 ---
 [LeetClock] 01/09/2026
 Start: 03:10 PM  End: 03:34 PM  Duration: 24:18
@@ -70,11 +96,9 @@ No accounts. No sign-ups. No APIs. No cloud.
 
 Your data stays in your browser using `chrome.storage.local`.
 
----
-
 ## 🔄 How It Works
 
-```text id="uwqyl7"
+```text
 Open a LeetCode Problem
           ↓
 Timer Starts Automatically ⏱️
@@ -92,11 +116,13 @@ LeetClock also detects LeetCode's client-side navigation, so switching to anothe
 
 > **Note:** Switching tabs or applications does not pause the timer. The session ends when you navigate away from the problem, solve it, or close the tracked tab.
 
----
-
 ## 🚀 Installation
 
-```bash id="bslxlc"
+You can install LeetClock directly from the [Chrome Web Store](https://chromewebstore.google.com/detail/leetclock/ljoojicooppjgfofmollbilcgmboajhk).
+
+For local development:
+
+```bash
 git clone https://github.com/YOUR_USERNAME/LeetClock.git
 ```
 
@@ -108,8 +134,6 @@ Then:
 4. Select the LeetClock project folder
 5. Pin the extension and start solving
 
----
-
 ## 🧰 Built With
 
 * JavaScript
@@ -118,11 +142,9 @@ Then:
 * MutationObserver
 * `chrome.storage.local`
 
----
-
 ## 📂 Project Structure
 
-```text id="4v8sso"
+```text
 LeetClock/
 ├── manifest.json
 ├── background.js      # Timer & storage
@@ -133,8 +155,6 @@ LeetClock/
 └── README.md
 ```
 
----
-
 ## 🗺️ Roadmap
 
 * [ ] Daily & weekly statistics
@@ -143,8 +163,6 @@ LeetClock/
 * [ ] Streak tracking
 * [ ] CSV / JSON export
 * [ ] Contest support
-
----
 
 ## 📄 License
 
