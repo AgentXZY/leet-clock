@@ -36,7 +36,7 @@ Install the extension directly from the **Chrome Web Store**:
 </p>
 
 <p align="center">
-  <img src="https://lh3.googleusercontent.com/NzwS5sVPKFCuaSamvv_2c9bR5EPTC82kHGZp-z9GPus5R_WTyga5My78TH2ODX3jRJp1MmyerutqEWQsDzIHRkM3kg=s1280-w1280-h800" alt="LeetClock popup displaying solved problem history" width="800">
+  <img src="[https://lh3.googleusercontent.com/NzwS5sVPKFCuaSamvv_2c9bR5EPTC82kHGZp-z9GPus5R_WTyga5My78TH2ODX3jRJp1MmyerutqEWQsDzIHRkM3kg=s1280-w1280-h800](https://lh3.googleusercontent.com/NzwS5sVPKFCuaSamvv_2c9bR5EPTC82kHGZp-z9GPus5R_WTyga5My78TH2OD3XjRJp1MmyerutqEWQsDzIHRkM3kg=s1280-w1280-h800)" alt="LeetClock popup displaying solved problem history" width="800">
 </p>
 
 <p align="center">
