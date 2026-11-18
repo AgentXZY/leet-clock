@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "LeetClock",
-  "version": "1.0",
-  "description": "Live toolbar timer and problem ID history for LeetCode.",
+  "version": "1.0.1",
+  "description": "Automated LeetCode solve timer with live toolbar badge, Cyber-HUD submission banners, and automated notes sync.",
   "permissions": ["storage", "tabs"],
   "host_permissions": ["https://leetcode.com/*"],
   "background": {
