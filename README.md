@@ -9,6 +9,16 @@
 ![JavaScript](https://img.shields.io/badge/JavaScript-Vanilla%20JS-F7DF1E?logo=javascript\&logoColor=black)
 ![Local First](https://img.shields.io/badge/Data-Local%20Storage-success)
 
+<p align="center">
+  <a href="https://chromewebstore.google.com/detail/leetclock/ljoojicooppjgfofmollbilcgmboajhk">
+    <img src="https://img.shields.io/badge/Install%20on-Chrome%20Web%20Store-4285F4?logo=googlechrome&logoColor=white" alt="Install LeetClock">
+  </a>
+</p>
+
+<p align="center">
+  <strong>🚀 <a href="https://chromewebstore.google.com/detail/leetclock/ljoojicooppjgfofmollbilcgmboajhk">Get LeetClock on the Chrome Web Store</a></strong>
+</p>
+
 **`chrome-extension` · `leetcode` · `leetcode-tracker` · `productivity` · `developer-tools` · `solve-time-tracker` · `coding` · `dsa` · `gamified` · `developer-humor` · `coding-dopamine` · `javascript` · `manifest-v3`**
 
 LeetClock is a lightweight Chrome extension that makes your LeetCode practice a little more trackable—and a little more fun.
@@ -94,10 +104,25 @@ LeetClock also detects LeetCode's client-side navigation, so switching to anothe
 
 ---
 
+
 ## 🚀 Installation
 
-```bash id="bslxlc"
-git clone https://github.com/YOUR_USERNAME/LeetClock.git
+### Option 1: Chrome Web Store (Recommended)
+
+Install LeetClock directly from the Chrome Web Store:
+
+<p align="center">
+  <a href="https://chromewebstore.google.com/detail/leetclock/ljoojicooppjgfofmollbilcgmboajhk">
+    <img src="https://img.shields.io/badge/Add%20to-Chrome-4285F4?style=for-the-badge&logo=googlechrome&logoColor=white" alt="Add to Chrome">
+  </a>
+</p>
+
+### Option 2: Manual Installation
+
+Clone the repository:
+
+```bash
+git clone https://github.com/AgentXZY/leet-clock.git
 ```
 
 Then:
@@ -106,7 +131,7 @@ Then:
 2. Enable **Developer mode**
 3. Click **Load unpacked**
 4. Select the LeetClock project folder
-5. Pin the extension and start solving
+5. Pin the extension and start solving!
 
 ---
 
